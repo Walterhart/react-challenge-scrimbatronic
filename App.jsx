@@ -189,8 +189,42 @@ export default function App() {
 		Tip: Add onClick={(e)=>console.log(e.target)} to the "main-container" div and click on the keys to familiarize yourself with the underlying DOM, or look at the Keys component in the components folder.  
 */
 
+	const handleKeyStrokeMouse = (event) =>{
+
+		let keyName = event.target.dataset.note
+		let inputMethod = event.target.type
+
+		setSynthKeys(prevKeys =>{
+			return prevKeys.map(key => {
+				return key.keyName === keyName ?  {...key, active: true} : key
+			})
+		})
+		
+	}
+
+	const handleKeyStrokeKeyboard = () =>{
+		let keyBoardKey = event.key
+		if(!event.repeat)
+		{
+			setSynthKeys(prevKeys =>{
+			return prevKeys.map(key => {
+				return key.computerKey === keyBoardKey ?  {...key, active: true, keyPressed: true} : key
+			})
+		})
+		}
+		
+	}
+	
+	const handleKeyUp= (event) =>{
+		let keyBoardKey = event.key
+		setSynthKeys(prevKeys =>{
+			return prevKeys.map(key => {
+				return key.computerKey === keyBoardKey ?  {...key, active: false, keyPressed: false} : key
+			})
+		})
+	}
 	return (
-		<div className="wrapper">
+		<div className="wrapper" onMouseDown={handleKeyStrokeMouse} onKeyDown={handleKeyStrokeKeyboard } onKeyUp={handleKeyUp}>
 			<div className="main-container">
 			
 				<Settings {...propsBundle} />
